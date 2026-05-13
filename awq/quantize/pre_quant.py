@@ -162,6 +162,15 @@ def run_awq(
             super().__init__()
             self.module = module
 
+        def __getattr__(self, name):
+            try:
+                return super().__getattr__(name)
+            except AttributeError as exc:
+                module = self._modules.get("module")
+                if module is not None and hasattr(module, name):
+                    return getattr(module, name)
+                raise exc
+
         def forward(self, inp, **kwargs):
             inps.append(inp)
             layer_kwargs.update(kwargs)
