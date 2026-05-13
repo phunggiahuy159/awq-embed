@@ -26,6 +26,12 @@ def get_named_linears(module):
     return {name: m for name, m in module.named_modules() if isinstance(m, nn.Linear)}
 
 
+def _get_hidden_states(layer_output):
+    if isinstance(layer_output, tuple):
+        return layer_output[0]
+    return layer_output
+
+
 def _is_qwen_or_llama(model):
     class_name = model.__class__.__name__.lower()
     return "qwen" in class_name or "llama" in class_name
@@ -224,7 +230,7 @@ def run_awq(
             )
         inps = inps.to(next(layer.parameters()).device)  # in case multi-gpu
         # get output as next layer's input
-        inps = layer(inps, **layer_kwargs)[0]
+        inps = _get_hidden_states(layer(inps, **layer_kwargs))
         for h in handles:
             h.remove()
         # now solve for scaling and clipping
