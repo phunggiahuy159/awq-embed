@@ -116,7 +116,10 @@ parser.add_argument(
     default=None,
     help="Path to save act scale",
 )
-args = parser.parse_args()
+if __name__ == "__main__":
+    args = parser.parse_args()
+else:
+    args, _unknown_args = parser.parse_known_args()
 assert (
     args.act_scale_path is not None and len(args.media_path) > 0
 ) or not args.smooth_scale

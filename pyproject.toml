@@ -17,12 +17,19 @@ dependencies = [
     "torch>=2.3.0", "torchvision>=0.18.0",
     "transformers>=4.51.0",
     "datasets",
-    "lm_eval==0.3.0", "texttable",
+    "texttable",
     "toml", "attributedict",
     "protobuf",
+]
+
+[project.optional-dependencies]
+eval = [
+    "lm_eval==0.3.0",
+]
+demo = [
     "gradio==3.35.2", "gradio_client==0.2.9",
     "fastapi", "uvicorn",
-    "pydantic==1.10.19"
+    "pydantic==1.10.19",
 ]
 
 [tool.setuptools.packages.find]
